@@ -4,7 +4,7 @@ class Pursuer {
     this.vel = createVector(0, 0);
     this.acc = createVector(0, 0);
     this.r = options?.r || 25;
-    this.colour = options?.colour || "#FF0000";
+    this.colour = options?.colour || '#FF0000';
     this.maxSpeed = options?.maxSpeed || 5;
     this.maxForce = options?.maxForce || 0.05;
   }
@@ -40,33 +40,31 @@ class Pursuer {
       }
     }
   }
-
+  // 속도, 위치, 가속도 업데이트 및 리셋
   update() {
     this.vel.add(this.acc);
     this.vel.limit(this.maxSpeed);
     this.pos.add(this.vel);
     this.acc.mult(0);
   }
-
+  // 가속도 추가
   applyForce(force) {
     this.acc.add(force);
   }
-
+  // 목표 위치로 향하는 st
   seek(target) {
     const desired = p5.Vector.sub(target, this.pos);
     desired.setMag(this.maxSpeed);
-    const steering = p5.Vector.sub(desired, this.vel);
-    steering.limit(this.maxForce);
-    this.applyForce(steering);
+    const steer = p5.Vector.sub(desired, this.vel);
+    steer.limit(this.maxForce);
+    this.applyForce(steer);
   }
-
+  // 도망자의 미래 예측 후 그곳으로 향하기
   pursue(evaders, prediction = 30) {
     const closest = this.findClosestEvader(evaders);
     if (!closest) return;
     const predictedVel = p5.Vector.mult(closest.vel, prediction);
     const predictedPos = p5.Vector.add(closest.pos, predictedVel);
-    // 더 작성해야 작동합니다.
-
     this.seek(predictedPos);
   }
 

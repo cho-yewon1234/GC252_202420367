@@ -29,27 +29,26 @@ class Point {
       this.setHeading(toMe.mult(-1).heading());
     }
   }
-
+  // 몸 우연하게 움직이기
   angleConstrainedBy(parent, grandParent) {
     const vecParentToMe = p5.Vector.sub(this.pos, parent.pos);
     const vecParentToGrandparent = p5.Vector.sub(grandParent.pos, parent.pos);
     let angle = p5.Vector.angleBetween(vecParentToMe, vecParentToGrandparent);
     angle = angle < 0 ? angle + 2 * Math.PI : angle;
     let [minAngle, maxAngle] = this.angleConstraint;
-    if (angle < 0) minAngle += 2 * Math.PI;
-    if (angle > 0) maxAngle += 2 * Math.PI;
+    if (minAngle < 0) minAngle += 2 * Math.PI;
+    if (maxAngle < 0) maxAngle += 2 * Math.PI;
     if (angle < minAngle || angle > maxAngle) {
-      console.log("constrained");
-
       const rotAngle = angle < minAngle ? -minAngle : -maxAngle;
-
       vecParentToGrandparent.rotate(rotAngle);
-
       const newPos = p5.Vector.add(vecParentToGrandparent, parent.pos);
-      this.pos.set(newPos);
-      this.setHeading(vecParentToGrandparent.mult(-1), this.heading());
+      this.setPos(newPos);
+      const tempVec = vecParentToGrandparent.copy();
+      tempVec.mult(-1);
+      this.setHeading(tempVec.heading());
     }
   }
+
   show() {
     push();
     translate(this.pos.x, this.pos.y);

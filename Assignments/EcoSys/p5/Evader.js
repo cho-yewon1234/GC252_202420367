@@ -1,12 +1,12 @@
 class Evader {
   constructor(x, y, options) {
     this.pos = createVector(x, y);
-    this.vel = createVector(0, 0);
+    this.vel = p5.Vector.random2D().mult(random(2, 4));
     this.acc = createVector(0, 0);
-    this.r = options?.r || 25;
-    this.colour = options?.colour || '#00FF00';
-    this.maxSpeed = options?.maxSpeed || 5;
-    this.maxForce = options?.maxForce || 0.05;
+    this.r = options?.r || 20;
+    this.colour = options?.colour || "#FFD93D";
+    this.maxSpeed = options?.maxSpeed || 4;
+    this.maxForce = options?.maxForce || 0.1;
   }
 
   findClosestPursuer(pursuers) {
@@ -27,7 +27,7 @@ class Evader {
       if (p !== this) {
         const d = this.pos.dist(p.pos);
         const sum = createVector(0, 0);
-        if (d > 0 && d < this.r * 2) {
+        if (d > 0 && d < this.r * 3) {
           const towardMe = p5.Vector.sub(this.pos, p.pos);
           towardMe.div(d);
           sum.add(towardMe);
@@ -47,11 +47,11 @@ class Evader {
     this.pos.add(this.vel);
     this.acc.mult(0);
   }
-  // 가속도 추가해주기
+  // 가속도 추가
   applyForce(force) {
     this.acc.add(force);
   }
-  // 목표로 가는 st
+  // 목표로 향함
   seek(target) {
     const desired = p5.Vector.sub(target, this.pos);
     desired.setMag(this.maxSpeed);
@@ -59,7 +59,7 @@ class Evader {
     steer.limit(this.maxForce);
     this.applyForce(steer);
   }
-  // 목표에서 도망가는 st
+  // 목표에서 도망가기
   flee(target) {
     const desired = p5.Vector.sub(target, this.pos);
     desired.setMag(this.maxSpeed);
@@ -78,10 +78,11 @@ class Evader {
   }
 
   wrapCoordinates() {
-    if (this.pos.x > width) this.pos.x = 0;
-    if (this.pos.x < 0) this.pos.x = width;
-    if (this.pos.y > height) this.pos.y = 0;
-    if (this.pos.y < 0) this.pos.y = height;
+    const margin = 70; // 작은 마진
+    if (this.pos.x > width + margin) this.pos.x = -margin;
+    if (this.pos.x < -margin) this.pos.x = width + margin;
+    if (this.pos.y > height + margin) this.pos.y = -margin;
+    if (this.pos.y < -margin) this.pos.y = height + margin;
   }
 
   show() {

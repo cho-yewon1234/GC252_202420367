@@ -1,0 +1,13 @@
+.section {
+  padding-inline: 1.5rem;
+}
+
+.container {
+  max-width: 50rem;
+  margin-inline: auto;
+}
+
+#canvas-container {
+  margin-inline: auto;
+  background-color: red;
+}

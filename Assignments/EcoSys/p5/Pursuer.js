@@ -1,34 +1,34 @@
-class Evader {
+class Pursuer {
   constructor(x, y, options) {
     this.pos = createVector(x, y);
-    this.vel = createVector(0, 0);
+    this.vel = p5.Vector.random2D().mult(random(1, 3));
     this.acc = createVector(0, 0);
     this.r = options?.r || 25;
-    this.colour = options?.colour || '#00FF00';
-    this.maxSpeed = options?.maxSpeed || 5;
+    this.colour = options?.colour || "#7FFFD4";
+    this.maxSpeed = options?.maxSpeed || 3;
     this.maxForce = options?.maxForce || 0.05;
   }
 
-  findClosestPursuer(pursuers) {
+  findClosestEvader(evaders) {
     let closest = null;
     let minDist = Infinity;
-    for (const p of pursuers) {
-      const d = this.pos.dist(p.pos);
+    for (const e of evaders) {
+      const d = this.pos.dist(e.pos);
       if (d < minDist) {
         minDist = d;
-        closest = p;
+        closest = e;
       }
     }
     return closest;
   }
 
-  separate(pursuers) {
-    for (const p of pursuers) {
-      if (p !== this) {
-        const d = this.pos.dist(p.pos);
+  separate(evaders) {
+    for (const e of evaders) {
+      if (e !== this) {
+        const d = this.pos.dist(e.pos);
         const sum = createVector(0, 0);
-        if (d > 0 && d < this.r * 2) {
-          const towardMe = p5.Vector.sub(this.pos, p.pos);
+        if (d > 0 && d < this.r * 4) {
+          const towardMe = p5.Vector.sub(this.pos, e.pos);
           towardMe.div(d);
           sum.add(towardMe);
         }
@@ -40,18 +40,18 @@ class Evader {
       }
     }
   }
-  // 속도와 위치
+  // 속도, 위치, 가속도 업데이트 및 리셋
   update() {
     this.vel.add(this.acc);
     this.vel.limit(this.maxSpeed);
     this.pos.add(this.vel);
     this.acc.mult(0);
   }
-  // 가속도 추가해주기
+  // 가속도 추가
   applyForce(force) {
     this.acc.add(force);
   }
-  // 목표로 가는 st
+  // 목표 위치로 향함
   seek(target) {
     const desired = p5.Vector.sub(target, this.pos);
     desired.setMag(this.maxSpeed);
@@ -59,31 +59,22 @@ class Evader {
     steer.limit(this.maxForce);
     this.applyForce(steer);
   }
-  // 목표에서 도망가는 st
-  flee(target) {
-    const desired = p5.Vector.sub(target, this.pos);
-    desired.setMag(this.maxSpeed);
-    desired.mult(-1);
-    const steer = p5.Vector.sub(desired, this.vel);
-    steer.limit(this.maxForce);
-    this.applyForce(steer);
-  }
-  // 추적자 예측 후 도망
-  evade(pursuers, prediction = 30) {
-    const closest = this.findClosestPursuer(pursuers);
+  // 도망자의 미래 예측 후 그곳으로 향함
+  pursue(evaders, prediction = 30) {
+    const closest = this.findClosestEvader(evaders);
     if (!closest) return;
     const predictedVel = p5.Vector.mult(closest.vel, prediction);
     const predictedPos = p5.Vector.add(closest.pos, predictedVel);
-    this.flee(predictedPos);
+    this.seek(predictedPos);
   }
 
   wrapCoordinates() {
-    if (this.pos.x > width) this.pos.x = 0;
-    if (this.pos.x < 0) this.pos.x = width;
-    if (this.pos.y > height) this.pos.y = 0;
-    if (this.pos.y < 0) this.pos.y = height;
+    const margin = 100; // 뱀장어용 마진
+    if (this.pos.x > width + margin) this.pos.x = -margin;
+    if (this.pos.x < -margin) this.pos.x = width + margin;
+    if (this.pos.y > height + margin) this.pos.y = -margin;
+    if (this.pos.y < -margin) this.pos.y = height + margin;
   }
-
   show() {
     const angle = this.vel.heading();
     push();
@@ -97,5 +88,16 @@ class Evader {
     vertex(this.r * Math.cos(radians(160)), this.r * Math.sin(radians(160)));
     endShape();
     pop();
+  }
+
+  showTarget() {
+    const closest = this.findClosestEvader(evaders);
+    if (closest) {
+      push();
+      noFill();
+      stroke(this.colour);
+      line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
+      pop();
+    }
   }
 }

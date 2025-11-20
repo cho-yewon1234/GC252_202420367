@@ -1,4 +1,4 @@
-class Animal {
+class Fish1 {
   constructor(x, y, distConstraint, angleConstraint, thickness = [40, 30]) {
     this.spine = [];
     this.head = null;
@@ -42,13 +42,6 @@ class Animal {
     });
     this.head.setHeading(this.spine[1].heading);
 
-    this.spine.forEach((aPoint, idx) => {
-      this.cwPoints[idx] = aPoint.getPointOnThickness(radians(90)); //오른편
-      this.ccwPoints[this.spine.length - 1 - idx] = aPoint.getPointOnThickness(
-        radians(-90)
-      );
-    });
-
     // this.spine[2].angleConstrainedBy(this.spine[1], this.spine[0]);
     this.spine.forEach((aPoint, idx) => {
       if (idx >= 2) {
@@ -56,12 +49,19 @@ class Animal {
       }
     });
 
+    this.spine.forEach((aPoint, idx) => {
+      this.cwPoints[idx] = aPoint.getPointOnThickness(radians(90));
+      this.ccwPoints[this.spine.length - 1 - idx] = aPoint.getPointOnThickness(
+        radians(-90)
+      );
+    });
+
     this.headPoints[0] = this.head.getPointOnThickness(radians(-60));
     this.headPoints[1] = this.head.getPointOnThickness(radians(-30));
     this.headPoints[2] = this.head.getPointOnThickness(radians(0));
     this.headPoints[3] = this.head.getPointOnThickness(radians(30));
     this.headPoints[4] = this.head.getPointOnThickness(radians(60));
-
+    // 꼬리 포인트, 꼬리가 움직이는 각도
     this.tailPoints[0] = this.tail.getPointOnThickness(radians(120));
     this.tailPoints[1] = this.tail.getPointOnThickness(radians(150));
     this.tailPoints[2] = this.tail.getPointOnThickness(radians(180));
@@ -118,9 +118,6 @@ class Animal {
     this.cwPoints.forEach((point) => {
       push();
       translate(point.x, point.y);
-      noStroke();
-      fill("#F00");
-      circle(0, 0, 8);
       pop();
     });
   }
@@ -129,9 +126,6 @@ class Animal {
     this.ccwPoints.forEach((point) => {
       push();
       translate(point.x, point.y);
-      noStroke();
-      fill("#00F");
-      circle(0, 0, 8);
       pop();
     });
   }
@@ -139,18 +133,39 @@ class Animal {
   showBodyShape() {
     push();
     noStroke();
-    fill("#0F0");
+    fill("#FFD93D");
     beginShape();
     this.bodyPoints.forEach((p) => {
-      curveVertex(p.x, p.y);
+      vertex(p.x, p.y);
     });
     endShape();
     pop();
   }
 
+  showFin() {
+    const right = this.head.getPointOnThickness(radians(135), 0, 2);
+    const left = this.head.getPointOnThickness(radians(-135), 0, 2);
+
+    push();
+    translate(right.x, right.y);
+    rotate(this.head.heading);
+    noStroke();
+    fill("#E6C235");
+    ellipse(0, 0, 15, 10);
+    pop();
+
+    push();
+    translate(left.x, left.y);
+    rotate(this.head.heading);
+    noStroke();
+    fill("#E6C235");
+    ellipse(0, 0, 15, 10);
+    pop();
+  }
+
   showEyes() {
-    const right = this.head.getPointOnThickness(radians(90), 0, 0.5);
-    const left = this.head.getPointOnThickness(radians(-90), 0, 0.5);
+    const right = this.head.getPointOnThickness(radians(90), 0, 0.8);
+    const left = this.head.getPointOnThickness(radians(-90), 0, 0.8);
     push();
     translate(right.x, right.y);
     rotate(this.head.heading);

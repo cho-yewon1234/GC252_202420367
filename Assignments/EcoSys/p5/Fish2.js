@@ -1,4 +1,4 @@
-class Animal {
+class Fish2 {
   constructor(x, y, distConstraint, angleConstraint, thickness = [40, 30]) {
     this.spine = [];
     this.head = null;
@@ -42,18 +42,18 @@ class Animal {
     });
     this.head.setHeading(this.spine[1].heading);
 
-    this.spine.forEach((aPoint, idx) => {
-      this.cwPoints[idx] = aPoint.getPointOnThickness(radians(90)); //오른편
-      this.ccwPoints[this.spine.length - 1 - idx] = aPoint.getPointOnThickness(
-        radians(-90)
-      );
-    });
-
     // this.spine[2].angleConstrainedBy(this.spine[1], this.spine[0]);
     this.spine.forEach((aPoint, idx) => {
       if (idx >= 2) {
         aPoint.angleConstrainedBy(this.spine[idx - 1], this.spine[idx - 2]);
       }
+    });
+
+    this.spine.forEach((aPoint, idx) => {
+      this.cwPoints[idx] = aPoint.getPointOnThickness(radians(90));
+      this.ccwPoints[this.spine.length - 1 - idx] = aPoint.getPointOnThickness(
+        radians(-90)
+      );
     });
 
     this.headPoints[0] = this.head.getPointOnThickness(radians(-60));
@@ -118,9 +118,6 @@ class Animal {
     this.cwPoints.forEach((point) => {
       push();
       translate(point.x, point.y);
-      noStroke();
-      fill("#F00");
-      circle(0, 0, 8);
       pop();
     });
   }
@@ -129,9 +126,6 @@ class Animal {
     this.ccwPoints.forEach((point) => {
       push();
       translate(point.x, point.y);
-      noStroke();
-      fill("#00F");
-      circle(0, 0, 8);
       pop();
     });
   }
@@ -139,18 +133,22 @@ class Animal {
   showBodyShape() {
     push();
     noStroke();
-    fill("#0F0");
+    fill("#3D3D3D");
     beginShape();
     this.bodyPoints.forEach((p) => {
-      curveVertex(p.x, p.y);
+      vertex(p.x, p.y);
     });
     endShape();
     pop();
   }
 
+  // 뱀장어는 지느러미 없음
+
+  // 눈의 위치 각도 크기 넣기
+
   showEyes() {
-    const right = this.head.getPointOnThickness(radians(90), 0, 0.5);
-    const left = this.head.getPointOnThickness(radians(-90), 0, 0.5);
+    const right = this.head.getPointOnThickness(radians(135), 3, 2);
+    const left = this.head.getPointOnThickness(radians(-135), 3, 2);
     push();
     translate(right.x, right.y);
     rotate(this.head.heading);
