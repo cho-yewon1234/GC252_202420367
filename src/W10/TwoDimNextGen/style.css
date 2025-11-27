@@ -1,0 +1,12 @@
+.section {
+  padding-inline: 1.5rem;
+}
+
+.container {
+  max-width: 60rem;
+  margin-inline: auto;
+}
+
+canvas {
+  margin-inline: auto;
+}

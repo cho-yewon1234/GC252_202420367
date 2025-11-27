@@ -141,7 +141,7 @@ class Fish1 {
     endShape();
     pop();
   }
-
+  //지느러미
   showFin() {
     const right = this.head.getPointOnThickness(radians(135), 0, 2);
     const left = this.head.getPointOnThickness(radians(-135), 0, 2);
