@@ -3,8 +3,7 @@ class Cell {
   size = [0, 0];
   state = false;
   nextState = false;
-  neighbors = [null, null];
-  rule = "00010011";
+  neighbors = [null, null, null, null, null, null, null, null];
 
   constructor(x, y, w, h, state = false) {
     this.pos = [x, y];
@@ -12,27 +11,30 @@ class Cell {
     this.state = state;
   }
 
-  setNeighbors(left, right) {
-    this.neighbors[0] = left;
-    this.neighbors[1] = right;
-  }
-
-  getCombinedState() {
-    const binaryString = `${this.neighbors[0]?.state ? 1 : 0}${
-      this.state ? 1 : 0
-    }${this.neighbors[1]?.state ? 1 : 0}`;
-    const decimalNum = parseInt(binaryString, 2);
-    return decimalNum;
-  }
-
-  getNextState() {
-    const combinedState = this.getCombinedState();
-    const nextStateString = this.rule.charAt(7 - combinedState);
-    return nextStateString === "1";
+  setNeighbors(tl, t, tr, r, br, b, bl, l) {
+    this.neighbors[0] = tl;
+    this.neighbors[1] = t;
+    this.neighbors[2] = tr;
+    this.neighbors[3] = r;
+    this.neighbors[4] = br;
+    this.neighbors[5] = b;
+    this.neighbors[6] = bl;
+    this.neighbors[7] = l;
   }
 
   computeNextState() {
-    this.nextState = this.getNextState();
+    const livingCnt = this.neighbors.filter((aNeighbor) => {
+      return aNeighbor?.state;
+    }).length;
+    if (livingCnt < 2) {
+      this.nextState = false;
+    } else if (livingCnt > 3) {
+      this.nextState = false;
+    } else if (livingCnt === 3) {
+      this.nextState = true;
+    } else {
+      this.nextState = this.state;
+    }
   }
 
   updateState() {

@@ -4,6 +4,7 @@ class Cell {
   state = false;
   neighbors = [null, null, null, null, null, null, null, null];
   nextState = false;
+
   static rule(neightbors, currentState) {
     const livingNeighborsCnt = neightbors.filter((neighbor) => {
       if (neighbor) return neighbor.state;
@@ -47,12 +48,12 @@ class Cell {
 
   render(isHovered = false) {
     if (isHovered) {
-      stroke('red');
+      stroke("red");
     } else {
-      stroke('grey');
+      stroke("grey");
     }
     if (this.state) {
-      fill('black');
+      fill("black");
     } else {
       noFill();
     }
