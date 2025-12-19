@@ -1,5 +1,4 @@
 class MinBall {
-  //vector변수
   pos;
   vel;
   acc;
