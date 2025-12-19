@@ -125,26 +125,26 @@ function draw() {
               // 위쪽에서 들어옴
               aBall.posX = random(width);
               aBall.posY = -50;
-              aBall.velX = random(-100, 100); // 좌우 랜덤
-              aBall.velY = random(150, 200); // 아래로
+              aBall.velX = random(-200, 200); // 좌우 랜덤
+              aBall.velY = random(250, 350); // 아래로
             } else if (out === 1) {
               // 오른쪽에서 들어옴
               aBall.posX = width + 50;
               aBall.posY = random(height);
-              aBall.velX = random(-200, -150); // 왼쪽으로
-              aBall.velY = random(-100, 100); // 상하 랜덤
+              aBall.velX = random(-350, -250); // 왼쪽으로
+              aBall.velY = random(-200, 200); // 상하 랜덤
             } else if (out === 2) {
               // 아래쪽에서 들어옴
               aBall.posX = random(width);
               aBall.posY = height + 50;
-              aBall.velX = random(-100, 100); // 좌우 랜덤
-              aBall.velY = random(-200, -150); // 위로
+              aBall.velX = random(-200, 200); // 좌우 랜덤
+              aBall.velY = random(-350, -250); // 위로
             } else {
               // 왼쪽에서 들어옴
               aBall.posX = -50;
               aBall.posY = random(height);
-              aBall.velX = random(150, 200); // 오른쪽으로
-              aBall.velY = random(-100, 100); // 상하 랜덤
+              aBall.velX = random(250, 350); // 오른쪽으로
+              aBall.velY = random(-200, 200); // 상하 랜덤
             }
             aBall.speed = 100;
             secBallInitialized[secIndex] = true;
@@ -171,7 +171,8 @@ function draw() {
         }
         // 밖으로 나가는 공들
         else if (secIndex < 30) {
-          aBall.colour = seeColour.s; // 색은 유지
+          aBall.colour = seeColour.s;
+
           // 벽 충돌 처리 안 함 → 밖으로 나감
         }
         // 완전히 사라진 공들 (30번 이상)

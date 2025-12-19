@@ -26,16 +26,19 @@ class HourBall {
   resolveWallCollision() {
     if (this.posX > width - 0.5 * this.diameter) {
       this.velX *= -1;
+      this.posX = width - 0.5 * this.diameter;
     } else if (this.posX < 0.5 * this.diameter) {
       this.velX *= -1;
+      this.posX = 0.5 * this.diameter;
     }
     if (this.posY > height - 0.5 * this.diameter) {
       this.velY *= -1;
+      this.posY = height - 0.5 * this.diameter;
     } else if (this.posY < 0.5 * this.diameter) {
       this.velY *= -1;
+      this.posY = 0.5 * this.diameter;
     }
   }
-
   show() {
     if (this.colour === "#222222") {
       return;
