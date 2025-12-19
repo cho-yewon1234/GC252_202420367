@@ -1,17 +1,20 @@
-class Ball {
+class HourBall {
   posX = 0;
   posY = 0;
   diameter = 100;
-  speed = 5;
+  speed = 2;
   velX = 1;
   velY = 1;
-  colour = 0;
-  constructor(x, y, diameter, speed, colour) {
+  colour = "#222222";
+  seeColour = "#2ecc71";
+  seehour;
+
+  constructor(x, y, seeHour) {
     this.posX = x;
     this.posY = y;
-    this.diameter = diameter;
-    this.speed = speed;
-    this.colour = colour;
+
+    this.colour = "#222222";
+    this.seeHour = seeHour;
     this.resetVelocity();
   }
   //위치에 속도를 더해 공 이동
@@ -34,14 +37,26 @@ class Ball {
   }
 
   show() {
+    if (this.colour === "#222222") {
+      return;
+    }
+
     if (this.isHovered()) {
+      stroke(this.colour);
+      strokeWeight(2);
       fill(this.colour);
-      noStroke();
+      circle(this.posX, this.posY, this.diameter);
+
+      fill(255);
+      textAlign(CENTER, CENTER);
+      textSize(this.diameter * 0.4);
+      text(this.seeHour, this.posX, this.posY);
     } else {
       stroke(this.colour);
+      strokeWeight(1);
       noFill();
+      circle(this.posX, this.posY, this.diameter);
     }
-    circle(this.posX, this.posY, this.diameter);
   }
 
   reset(x, y) {
